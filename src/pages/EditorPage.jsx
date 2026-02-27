@@ -95,15 +95,31 @@ export default function EditorPage() {
       </div>
 
       {/* FOOTER: TIMELINE REPLAY */}
-      <footer className="bg-black text-white p-4 flex items-center justify-between gap-8 h-24">
+      <footer className="bg-black text-white p-4 flex items-center justify-between gap-8 h-20">
         <div className="flex flex-col min-w-[150px]">
           <span className="text-xl lowercase">timeline replay:</span>
-          <span className="text-sm">{replayIndex !== null ? replayIndex + 1 : snapshots.length}/{snapshots.length}</span>
+          <span className="text-sm">
+            {snapshots.length > 0 
+              ? `${replayIndex !== null ? replayIndex + 1 : snapshots.length} / ${snapshots.length}` 
+              : "0 / 0"}
+          </span>
         </div>
 
-        {/* Hand-drawn look slider */}
-        <div className="flex-1 relative h-2">
-          <div className="absolute inset-0 border-b-2 border-white border-dashed opacity-50" />
+        {/* Straight Line Functional Slider */}
+        <div className="flex-1 relative flex items-center h-full">
+          {/* Background Straight Line */}
+          <div className="absolute w-full h-[2px] bg-white/30"></div>
+          
+          {/* Progress Line */}
+          <div 
+            className="absolute h-[2px] bg-[#FFF176]" 
+            style={{ 
+              width: `${snapshots.length > 1 
+                ? ((replayIndex !== null ? replayIndex : snapshots.length - 1) / (snapshots.length - 1)) * 100 
+                : 0}%` 
+            }}
+          ></div>
+
           <input
             type="range"
             min="0"
@@ -112,26 +128,26 @@ export default function EditorPage() {
             onChange={(e) => setReplayIndex(Number(e.target.value))}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           />
-          {/* Custom Slider Track based on image */}
-          <svg className="absolute top-0 w-full h-12 -translate-y-4 pointer-events-none overflow-visible">
-            <path 
-              d={`M 0 20 Q 50 10, 100 25 T 200 20 T 300 25 T 400 20 T 500 25 T 600 20 T 700 25 T 800 20`}
-              fill="none" 
-              stroke="white" 
-              strokeWidth="3" 
-            />
-            <circle 
-              cx={`${(replayIndex !== null ? replayIndex : snapshots.length - 1) / (snapshots.length - 1 || 1) * 100}%`} 
-              cy="20" 
-              r="8" 
-              fill="#FFF176" 
-            />
-          </svg>
+
+          {/* Custom Slider Thumb */}
+          <div 
+            className="absolute w-4 h-4 bg-[#FFF176] rounded-full shadow-[0_0_10px_rgba(255,241,118,0.5)] pointer-events-none"
+            style={{ 
+              left: `${snapshots.length > 1 
+                ? ((replayIndex !== null ? replayIndex : snapshots.length - 1) / (snapshots.length - 1)) * 100 
+                : 0}%`,
+              transform: 'translateX(-50%)'
+            }}
+          ></div>
         </div>
 
         <button 
           onClick={() => setReplayIndex(null)}
-          className="border-2 border-white px-8 py-2 text-2xl lowercase hover:bg-white hover:text-black transition-colors"
+          className={`border-2 px-8 py-1 text-xl lowercase transition-colors ${
+            replayIndex === null 
+            ? "bg-[#FFF176] text-black border-[#FFF176]" 
+            : "border-white text-white hover:bg-white hover:text-black"
+          }`}
         >
           live
         </button>
