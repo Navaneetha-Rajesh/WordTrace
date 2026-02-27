@@ -1,5 +1,15 @@
 export function calculateAuthorshipScore(events) {
-  if (!events || events.length === 0) return 0;
+  if (!events || events.length === 0) {
+    return {
+      score: 0,
+      breakdown: {
+        writing: 0,
+        revision: 0,
+        pastePenalty: 0,
+        consistency: 0,
+      },
+    };
+  }
 
   const insertEvents = events.filter(e => e.event_type === "insert").length;
   const deleteEvents = events.filter(e => e.event_type === "delete").length;
@@ -10,23 +20,32 @@ export function calculateAuthorshipScore(events) {
     0
   );
 
-  let score = 0;
+  let writing = 0;
+  let revision = 0;
+  let pastePenalty = 0;
+  let consistency = 0;
 
-  // Writing activity
-  if (insertEvents > 20) score += 25;
-  else if (insertEvents > 10) score += 15;
-  else score += 5;
+  if (insertEvents > 20) writing = 25;
+  else if (insertEvents > 10) writing = 15;
+  else writing = 5;
 
-  // Revision depth
-  if (deleteEvents > 5) score += 20;
+  if (deleteEvents > 5) revision = 20;
 
-  // Low paste dependency
-  if (totalPasteLength < 500) score += 25;
-  else if (totalPasteLength < 1500) score += 10;
+  if (totalPasteLength < 500) pastePenalty = 25;
+  else if (totalPasteLength < 1500) pastePenalty = 10;
+  else pastePenalty = 0;
 
-  // Consistency bonus
-  if (insertEvents > deleteEvents) score += 15;
+  if (insertEvents > deleteEvents) consistency = 15;
 
-  // Cap at 100
-  return Math.min(score, 100);
+  const total = Math.min(writing + revision + pastePenalty + consistency, 100);
+
+  return {
+    score: total,
+    breakdown: {
+      writing,
+      revision,
+      pastePenalty,
+      consistency,
+    },
+  };
 }

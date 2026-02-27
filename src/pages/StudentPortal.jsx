@@ -7,56 +7,102 @@ export default function StudentPortal() {
   const [events, setEvents] = useState([]);
   const [snapshots, setSnapshots] = useState([]);
   const [replayIndex, setReplayIndex] = useState(null);
-  const score = calculateAuthorshipScore(events);
+  const [sessionStart] = useState(Date.now());
+
+  const { score, breakdown } = calculateAuthorshipScore(events);
+
   const pasteEvents = events.filter(e => e.event_type === "paste");
   const aiDeclaredCount = pasteEvents.filter(
-  e => e.metadata?.ai_declared
+    e => e.metadata?.ai_declared
   ).length;
+
+  const sessionDuration = Math.floor(
+    (Date.now() - sessionStart) / 1000
+  );
+
+  const handleSubmit = () => {
+    const submission = {
+      id: Date.now(),
+      content,
+      events,
+      snapshots,
+      score,
+      breakdown,
+    };
+
+    const existing =
+      JSON.parse(localStorage.getItem("submissions")) || [];
+
+    localStorage.setItem(
+      "submissions",
+      JSON.stringify([...existing, submission])
+    );
+
+    alert("Submission saved for professor review.");
+  };
 
   let badgeLabel = "";
   let badgeColor = "";
 
-if (score >= 75) {
-  badgeLabel = "Authentic Process";
-  badgeColor = "bg-green-500";
-} else if (score >= 40) {
-  badgeLabel = "Mixed Contribution";
-  badgeColor = "bg-yellow-400";
-} else {
-  badgeLabel = "High External Dependency";
-  badgeColor = "bg-red-500";
-}
+  if (score >= 75) {
+    badgeLabel = "Authentic Process";
+    badgeColor = "bg-green-500";
+  } else if (score >= 40) {
+    badgeLabel = "Mixed Contribution";
+    badgeColor = "bg-yellow-400";
+  } else {
+    badgeLabel = "High External Dependency";
+    badgeColor = "bg-red-500";
+  }
 
   const isReplaying = replayIndex !== null;
 
   return (
     <div className="h-screen flex flex-col">
-
-      {/* Main Section */}
       <div className="flex flex-1">
-
         {/* LEFT PANEL */}
         <div className="w-1/3 border-r p-4 bg-gray-50">
-          <h2 className="text-xl font-semibold mb-4">Analytics Panel</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Analytics Panel
+          </h2>
+
           <div className="mb-4">
-            <p className="font-semibold">Authorship Confidence</p>
+            <p className="font-semibold">
+              Authorship Confidence
+            </p>
             <div className="w-full bg-gray-200 rounded h-4 mt-2">
-                <div
+              <div
                 className="bg-green-500 h-4 rounded"
                 style={{ width: `${score}%` }}
-                ></div>
+              />
             </div>
-            <p className="text-sm mt-1">{score}% Human Authored</p>
-            </div>
+            <p className="text-sm mt-1">
+              {score}% Human Authored
+            </p>
+          </div>
+
           <div className="mb-4">
-        <p className="font-semibold">Integrity Badge</p>
-        <div className={`mt-2 px-3 py-2 text-white rounded ${badgeColor}`}>
-            {badgeLabel}
-        </div>
-        </div>
-          <div className="mb-4">Score Breakdown</div>
-          <div className="mt-4">
-  <p className="font-semibold mb-2">AI Transparency Log</p>
+            <p className="font-semibold">Integrity Badge</p>
+            <div
+              className={`mt-2 px-3 py-2 text-white rounded ${badgeColor}`}
+            >
+              {badgeLabel}
+            </div>
+          </div>
+
+            <p className="font-semibold mb-2">Score Breakdown</p>
+          <div className="text-xs text-gray-600 mb-4">
+
+            <p>Writing Activity: +{breakdown.writing}</p>
+            <p>Revision Depth: +{breakdown.revision}</p>
+            <p>Low Paste Dependency: +{breakdown.pastePenalty}</p>
+            <p>Consistency Bonus: +{breakdown.consistency}</p>
+          </div>
+
+          <div className="mt-6">
+        <p className="font-semibold mb-2">
+            AI Transparency Log
+        </p>
 
   <p className="text-sm mb-1">
     Total Paste Events: {pasteEvents.length}
@@ -72,23 +118,42 @@ if (score >= 75) {
     ) : (
       pasteEvents.map((event, index) => (
         <div key={index} className="mb-2">
-          <p><strong>Source:</strong> {event.metadata?.source || "Not specified"}</p>
-          <p><strong>Reason:</strong> {event.metadata?.explanation || "Not provided"}</p>
-          <p><strong>AI Used:</strong> {event.metadata?.ai_declared ? "Yes" : "No"}</p>
-          <hr className="my-1"/>
+          <p>
+            <strong>Source:</strong>{" "}
+            {event.metadata?.source || "Not specified"}
+          </p>
+          <p>
+            <strong>Reason:</strong>{" "}
+            {event.metadata?.explanation || "Not provided"}
+          </p>
+          <p>
+            <strong>AI Used:</strong>{" "}
+            {event.metadata?.ai_declared ? "Yes" : "No"}
+          </p>
+          <hr className="my-1" />
         </div>
       ))
     )}
     </div>
     </div>
+
+          <div className="text-sm mt-2">
+            Session Duration: {sessionDuration}s
+          </div>
         </div>
 
         {/* RIGHT PANEL */}
         <div className="w-2/3 p-4">
-          <h2 className="text-xl font-semibold mb-4">Editor</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Editor
+          </h2>
 
           <Editor
-            content={isReplaying ? snapshots[replayIndex]?.content || "" : content}
+            content={
+              isReplaying
+                ? snapshots[replayIndex]?.content || ""
+                : content
+            }
             setContent={setContent}
             events={events}
             setEvents={setEvents}
@@ -96,12 +161,21 @@ if (score >= 75) {
             setSnapshots={setSnapshots}
             isReplaying={isReplaying}
           />
+
+          <button
+            onClick={handleSubmit}
+            className="mt-4 px-4 py-2 bg-black text-white rounded"
+          >
+            Submit for Review
+          </button>
         </div>
-      </div>
+            </div>
 
       {/* Replay Slider */}
       <div className="border-t p-4 bg-white">
-        <h2 className="text-lg font-semibold mb-2">Timeline Replay</h2>
+        <h2 className="text-lg font-semibold mb-2">
+          Timeline Replay
+        </h2>
 
         {snapshots.length > 0 ? (
           <>
@@ -114,7 +188,9 @@ if (score >= 75) {
               min="0"
               max={snapshots.length - 1}
               value={replayIndex ?? snapshots.length - 1}
-              onChange={(e) => setReplayIndex(Number(e.target.value))}
+              onChange={(e) =>
+                setReplayIndex(Number(e.target.value))
+              }
               className="w-full"
             />
 
