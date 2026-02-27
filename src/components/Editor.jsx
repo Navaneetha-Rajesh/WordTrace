@@ -1,18 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Editor() {
-  const [content, setContent] = useState("");
-  const [events, setEvents] = useState([]);
-  const [snapshots, setSnapshots] = useState([]);
-  const [sessionStart] = useState(Date.now());
+export default function Editor({
+  content,
+  setContent,
+  events,
+  setEvents,
+  snapshots,
+  setSnapshots,
+  isReplaying,
+}) {
+  const contentRef = useRef(content);
+
+  // Keep ref updated with latest content
+  useEffect(() => {
+    contentRef.current = content;
+  }, [content]);
 
   const getWordCount = (text) => {
     return text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
   };
 
-  // INSERT EVENTS
   const handleChange = (e) => {
+    if (isReplaying) return;
+
     const newContent = e.target.value;
 
     const event = {
@@ -27,14 +38,15 @@ export default function Editor() {
     setContent(newContent);
   };
 
-  // DELETE EVENTS
   const handleKeyDown = (e) => {
+    if (isReplaying) return;
+
     if (e.key === "Backspace") {
       const event = {
         id: uuidv4(),
         timestamp: Date.now(),
         event_type: "delete",
-        word_count: getWordCount(content),
+        word_count: getWordCount(contentRef.current),
         metadata: {},
       };
 
@@ -42,15 +54,16 @@ export default function Editor() {
     }
   };
 
-  // PASTE EVENTS
   const handlePaste = (e) => {
+    if (isReplaying) return;
+
     const pastedText = e.clipboardData.getData("text");
 
     const event = {
       id: uuidv4(),
       timestamp: Date.now(),
       event_type: "paste",
-      word_count: getWordCount(content),
+      word_count: getWordCount(contentRef.current),
       metadata: {
         length: pastedText.length,
       },
@@ -59,43 +72,36 @@ export default function Editor() {
     setEvents((prev) => [...prev, event]);
   };
 
-  // SNAPSHOT SYSTEM (every 30 seconds)
+  // Stable Snapshot System
   useEffect(() => {
+    if (isReplaying) return;
+
     const interval = setInterval(() => {
       setSnapshots((prev) => {
-        // prevent duplicate snapshots
+        const latestContent = contentRef.current;
+
         if (
           prev.length > 0 &&
-          prev[prev.length - 1].content === content
+          prev[prev.length - 1].content === latestContent
         ) {
           return prev;
         }
 
-        return [
+        const updated = [
           ...prev,
           {
             timestamp: Date.now(),
-            content: content,
+            content: latestContent,
           },
         ];
+
+        console.log("Snapshot added:", updated);
+        return updated;
       });
-    }, 30000);
+    }, 30000); // 10 seconds for testing
 
     return () => clearInterval(interval);
-  }, [content]);
-
-  // Debug Logs
-  useEffect(() => {
-    console.log("Session started at:", sessionStart);
-  }, []);
-
-  useEffect(() => {
-    console.log("Events:", events);
-  }, [events]);
-
-  useEffect(() => {
-    console.log("Snapshots:", snapshots);
-  }, [snapshots]);
+  }, [isReplaying]);
 
   return (
     <textarea
@@ -103,6 +109,7 @@ export default function Editor() {
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
+      disabled={isReplaying}
       className="w-full h-96 border rounded p-2"
       placeholder="Start typing here..."
     />
