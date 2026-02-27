@@ -1,3 +1,22 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'Schoolbell', cursive;
+}
+
+/* Custom hatching pattern */
+.bg-hatch {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #FFF59D,
+    #FFF59D 2px,
+    transparent 2px,
+    transparent 7px
+  );
+}

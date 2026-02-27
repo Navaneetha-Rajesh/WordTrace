@@ -24,21 +24,22 @@ export default function ProfessorDashboard() {
           {submissions.map((sub) => (
             <div
               key={sub.id}
-              className="p-4 border rounded flex justify-between items-center"
+              className="p-4 border rounded flex justify-between items-center bg-white shadow-sm"
             >
               <div>
-                <p><strong>Submission ID:</strong> {sub.id}</p>
+                {/* Displays the document name or a fallback ID */}
                 <p>
-                <strong>Score:</strong>{" "}
-                {typeof sub.score === "object" ? sub.score.score : sub.score}%
+                  <strong>Document Name:</strong> {sub.title || `Submission ${sub.id}`}
+                </p>
+                <p>
+                  <strong>Score:</strong>{" "}
+                  {typeof sub.score === "object" ? sub.score.score : sub.score}%
                 </p>
               </div>
 
               <button
-                onClick={() =>
-                  navigate(`/professor/doc/${sub.id}`)
-                }
-                className="px-3 py-1 bg-black text-white rounded"
+                onClick={() => navigate(`/professor/doc/${sub.id}`)}
+                className="px-3 py-1 bg-black text-white rounded hover:bg-gray-800 transition-colors"
               >
                 View
               </button>
