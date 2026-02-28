@@ -69,7 +69,6 @@ export default function DocumentView() {
             </div>
             <div>
               <p>AI declarations:</p>
-              <p className="pl-12 text-lg text-gray-500 italic">external contents</p>
               <p className="pl-4">{events.filter(e => e.metadata?.ai_declared).length}</p>
             </div>
             <div>
@@ -154,10 +153,8 @@ export default function DocumentView() {
                       <p>total pastes: {events.filter(e => e.event_type === "paste").length}</p>
                       <div className="flex gap-2">
                         <span>AI declarations:</span>
-                        
-                        <div className="text-sm text-gray-500 italic">
-                          <p>external contents</p>
-                          <p>external contents</p>
+                        <div className="text-xl space-y-2 lowercase">
+                            {events.filter(e => e.metadata?.ai_declared).length}
                         </div>
                       </div>
                       <p>session duration: {doc.duration || 0}s</p>

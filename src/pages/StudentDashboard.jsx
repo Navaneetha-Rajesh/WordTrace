@@ -72,7 +72,7 @@ export default function StudentDashboard() {
           <div
             key={doc.id}
             onClick={() => navigate(`/student/doc/${doc.id}`)}
-            className="w-full h-16 flex items-center justify-center cursor-pointer relative group"
+            className="w- h-16 flex items-center justify-center cursor-pointer relative group"
             style={hatchButtonStyle}
           >
             <span className="text-3xl lowercase z-10 px-4">

@@ -15,9 +15,9 @@ export default function ProfessorDashboard() {
   }, []);
 
   const getHatchImage = (score) => {
-    if (score >= 75) return y1Hatch;
-    if (score >= 40) return bHatch;
-    return gHatch;
+    if (score === 100) return gHatch;
+    if (score === 0) return y1Hatch;
+    return bHatch;
   };
 
   return (
