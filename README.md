@@ -1,16 +1,143 @@
-# React + Vite
+# 📚 WordTrace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+WordTrace is a process-based authorship transparency platform designed to restore trust in academic writing in the age of AI.
 
-Currently, two official plugins are available:
+Traditional AI detection tools analyze only the final output and often produce false positives, leading to unfair accusations and academic stress.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+WordTrace shifts the focus from output to **process verification** by tracking **how** a document is written — not just **what** is submitted.
 
-## React Compiler
+By logging real-time writing behavior, detecting paste events, capturing document snapshots, and generating authorship confidence scores, WordTrace provides educators with contextual transparency instead of black-box suspicion.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🚀 Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+- **React (Vite)** – UI framework
+- **Tailwind CSS** – Styling
+- **React Router DOM** – Routing & navigation
+
+### Backend & Data Handling
+- **Supabase** – Backend database & cloud persistence
+- **React Hooks** – State management (`useState`, `useEffect`)
+- **UUID** – Unique event tracking
+
+---
+
+## ✨ Features
+
+### 1️⃣ Real-Time Writing Log
+Tracks insert, delete, and paste events with timestamped writing behavior to build a complete writing history.
+
+### 2️⃣ Paste Detection + Explanation Prompt
+Detects large paste blocks and prompts students to declare:
+- Source
+- Reason
+- AI usage (if applicable)
+
+### 3️⃣ Timeline Replay
+Captures periodic document snapshots and includes an interactive slider to replay the evolution of the writing.
+
+### 4️⃣ Authorship Confidence Meter
+Heuristic scoring based on:
+- Writing activity depth  
+- Revision patterns  
+- Paste dependency  
+
+### 5️⃣ AI Transparency Log
+Displays:
+- Paste events  
+- Declared AI usage  
+- Source explanations  
+
+### 6️⃣ Professor Dashboard
+Allows educators to:
+- View submissions  
+- Check authorship scores  
+- Replay writing timelines  
+
+### 7️⃣ Integrity Report
+Generates a downloadable certificate of authorship for verified student work.
+
+---
+
+## 🏗 Architecture Overview
+
+```
+Login
+   ↓
+Student Dashboard
+   ↓
+Document Editor
+   ↓
+Process Tracking Engine (Supabase)
+   ↓
+Submission
+   ↓
+Professor Dashboard
+   ↓
+View Student Documents
+   ↓
+Generate Report
+```
+
+---
+
+## 🛠 Installation & Setup
+
+### Prerequisites
+- Node.js (v16+ recommended)
+- npm installed
+- A Supabase project with:
+  - `documents` table
+  - `submissions` table
+
+---
+
+### Clone Repository
+
+```bash
+git clone https://github.com/Navaneetha-Rajesh/WordTrace.git
+cd WordTrace
+npm install
+```
+
+---
+
+### Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+---
+
+### Run Project
+
+```bash
+npm run dev
+```
+
+Then open:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 👥 Team Members
+
+- **Navaneetha Rajesh**
+- **Eza Mariyam Robin**
+
+---
+
+## 📄 License
+
+Distributed under the MIT License.
+
+© 2026 Navaneetha Rajesh, Eza Mariyam Robin.
