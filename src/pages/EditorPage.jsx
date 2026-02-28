@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Editor from "../components/Editor";
 import { calculateAuthorshipScore } from "../utils/scoring";
+// Import the hatching asset for the submit button
+import hatchBg from "../assets/y-hatch.png";
 
 export default function EditorPage() {
   const { id } = useParams();
@@ -12,11 +14,44 @@ export default function EditorPage() {
   const [snapshots, setSnapshots] = useState([]);
   const [replayIndex, setReplayIndex] = useState(null);
   const [sessionStart] = useState(Date.now());
+  const [docTitle, setDocTitle] = useState("");
+
+  // Load document data from local storage
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("studentDocuments")) || [];
+    const found = stored.find((doc) => String(doc.id) === String(id));
+    if (found) {
+      setContent(found.content);
+      setEvents(found.events);
+      setSnapshots(found.snapshots);
+      setDocTitle(found.title || "untitled doc");
+    }
+  }, [id]);
 
   // Calculations
   const { score, breakdown } = calculateAuthorshipScore(events);
   const isReplaying = replayIndex !== null;
   const sessionDuration = Math.floor((Date.now() - sessionStart) / 1000);
+
+  // Function to handle submission
+  const handleSubmit = () => {
+    const submissions = JSON.parse(localStorage.getItem("submissions")) || [];
+    const newSubmission = {
+      id,
+      studentName: "Navaneetha Rajesh", // Replace with dynamic user data if available
+      content,
+      events,
+      snapshots,
+      score,
+      breakdown,
+      duration: sessionDuration,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem("submissions", JSON.stringify([...submissions, newSubmission]));
+    alert("Assignment submitted successfully!");
+    navigate("/student");
+  };
 
   return (
     <div className="h-screen flex flex-col font-['Schoolbell'] text-[#1a1a1a] bg-[#FFFEF4]">
@@ -79,7 +114,24 @@ export default function EditorPage() {
 
         {/* RIGHT PANEL: EDITOR */}
         <main className="flex-1 p-10 flex flex-col">
-          <h1 className="text-5xl mb-8 lowercase">editor</h1>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-5xl lowercase">editor</h1>
+            
+            {/* SUBMIT BUTTON */}
+            <button 
+              onClick={handleSubmit}
+              className="px-10 py-1 border-2 border-black text-2xl lowercase hover:opacity-80 transition-opacity"
+              style={{ 
+                backgroundImage: `url(${hatchBg})`,
+                backgroundSize: '150%',
+                backgroundPosition: 'center',
+                borderRadius: "255px 15px 225px 15px/15px 225px 15px 255px" 
+              }}
+            >
+              submit
+            </button>
+          </div>
+
           <div className="flex-1 border-4 border-black p-4 bg-white relative">
             <Editor
               content={isReplaying ? snapshots[replayIndex]?.content || "" : content}
@@ -105,12 +157,8 @@ export default function EditorPage() {
           </span>
         </div>
 
-        {/* Straight Line Functional Slider */}
         <div className="flex-1 relative flex items-center h-full">
-          {/* Background Straight Line */}
           <div className="absolute w-full h-[2px] bg-white/30"></div>
-          
-          {/* Progress Line */}
           <div 
             className="absolute h-[2px] bg-[#FFF176]" 
             style={{ 
@@ -129,7 +177,6 @@ export default function EditorPage() {
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           />
 
-          {/* Custom Slider Thumb */}
           <div 
             className="absolute w-4 h-4 bg-[#FFF176] rounded-full shadow-[0_0_10px_rgba(255,241,118,0.5)] pointer-events-none"
             style={{ 
