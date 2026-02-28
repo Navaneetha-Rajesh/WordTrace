@@ -1,143 +1,111 @@
-# 📚 WordTrace
+# WordTrace
 
-WordTrace is a process-based authorship transparency platform designed to restore trust in academic writing in the age of AI.
+**WordTrace** is a process-based authorship transparency platform designed to restore trust in academic writing in the age of AI.
 
-Traditional AI detection tools analyze only the final output and often produce false positives, leading to unfair accusations and academic stress.
+Traditional AI detection tools analyze only the final output and often produce false positives, leading to unfair accusations and academic stress. WordTrace shifts the focus from output to process verification by tracking how a document is written — not just what is submitted. By logging real-time writing behavior, detecting paste events, capturing document snapshots, and generating authorship confidence scores, WordTrace provides educators with contextual transparency instead of black-box suspicion.
 
-WordTrace shifts the focus from output to **process verification** by tracking **how** a document is written — not just **what** is submitted.
+##  Features
 
-By logging real-time writing behavior, detecting paste events, capturing document snapshots, and generating authorship confidence scores, WordTrace provides educators with contextual transparency instead of black-box suspicion.
+1. **Real-Time Writing Log**
+* Tracks insert, delete, and paste events.
+* Records timestamped writing behavior.
+* Builds complete writing history.
 
----
 
-## 🚀 Tech Stack
+2. **Paste Detection + Explanation Prompt**
+* Detects large paste blocks.
+* Prompts student to declare: Source, Reason, and AI usage.
+* Stores transparency metadata.
+
+
+3. **Timeline Replay**
+* Captures periodic document snapshots.
+* Interactive slider to replay writing evolution.
+* Visual proof of progressive development.
+
+
+4. **Authorship Confidence Meter**
+* Heuristic scoring based on: Writing activity depth, Revision patterns, Paste dependency, and Behavioral consistency.
+
+
+5. **AI Transparency Log**
+* Display Paste events.
+* Display Declared AI usage.
+* Display Source explanations.
+
+
+6. **Integrity Badge System**
+7. **Professor Dashboard**
+* View submissions.
+* See authorship score.
+* Replay writing timeline.
+* Review transparency logs.
+
+
+
+##  Tech Stack
 
 ### Frontend
-- **React (Vite)** – UI framework
-- **Tailwind CSS** – Styling
-- **React Router DOM** – Routing & navigation
 
-### Backend & Data Handling
-- **Supabase** – Backend database & cloud persistence
-- **React Hooks** – State management (`useState`, `useEffect`)
-- **UUID** – Unique event tracking
+* **React (Vite)** – UI framework
+* **Tailwind CSS** – Styling
+* **React Router DOM** – Routing & navigation
 
----
+### State & Data Handling
 
-## ✨ Features
+* **React Hooks (useState, useEffect)** – State management
+* **LocalStorage API** – Client-side persistence
+* **UUID** – Unique event tracking
 
-### 1️⃣ Real-Time Writing Log
-Tracks insert, delete, and paste events with timestamped writing behavior to build a complete writing history.
 
-### 2️⃣ Paste Detection + Explanation Prompt
-Detects large paste blocks and prompts students to declare:
-- Source
-- Reason
-- AI usage (if applicable)
+##  Architectural Diagram
 
-### 3️⃣ Timeline Replay
-Captures periodic document snapshots and includes an interactive slider to replay the evolution of the writing.
-
-### 4️⃣ Authorship Confidence Meter
-Heuristic scoring based on:
-- Writing activity depth  
-- Revision patterns  
-- Paste dependency  
-
-### 5️⃣ AI Transparency Log
-Displays:
-- Paste events  
-- Declared AI usage  
-- Source explanations  
-
-### 6️⃣ Professor Dashboard
-Allows educators to:
-- View submissions  
-- Check authorship scores  
-- Replay writing timelines  
-
-### 7️⃣ Integrity Report
-Generates a downloadable certificate of authorship for verified student work.
-
----
-
-## 🏗 Architecture Overview
+```mermaid
+graph TD
+    A[Login] --> B[Student Dashboard]
+    B --> C[Document Editor]
+    C --> D[Process Tracking Engine]
+    D --> E[Submission]
+    E --> F[Professor Dashboard]
+    F --> G[View Student Documents]
+    G --> H[Generate Report]
 
 ```
-Login
-   ↓
-Student Dashboard
-   ↓
-Document Editor
-   ↓
-Process Tracking Engine (Supabase)
-   ↓
-Submission
-   ↓
-Professor Dashboard
-   ↓
-View Student Documents
-   ↓
-Generate Report
-```
 
----
 
-## 🛠 Installation & Setup
+##  Installation & Run Commands
 
-### Prerequisites
-- Node.js (v16+ recommended)
-- npm installed
-- A Supabase project with:
-  - `documents` table
-  - `submissions` table
-
----
-
-### Clone Repository
+### Installation
 
 ```bash
 git clone https://github.com/Navaneetha-Rajesh/WordTrace.git
 cd WordTrace
 npm install
+
 ```
 
----
-
-### Environment Configuration
-
-Create a `.env` file in the root directory:
-
-```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
----
-
-### Run Project
+### Run
 
 ```bash
 npm run dev
-```
-
-Then open:
 
 ```
-http://localhost:5173
-```
 
----
 
-## 👥 Team Members
+##  Media
 
-- **Navaneetha Rajesh**
-- **Eza Mariyam Robin**
+* **Screenshots:** [Insert Screenshots Here]
+* **Demo Video Link:** [Insert Demo Video Link Here]
 
----
 
-## 📄 License
+##  Team Members
 
-Distributed under the MIT License.
+* Navaneetha Rajesh
+* Eza Mariyam Robin
 
+
+##  License Info
+
+Distributed under the **MIT License**.
 © 2026 Navaneetha Rajesh, Eza Mariyam Robin.
+
