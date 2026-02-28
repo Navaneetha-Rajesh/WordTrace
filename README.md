@@ -102,7 +102,7 @@ npm run dev
 * ![Student Dashboard](./src/assets/Screenshot5.jpeg)
 * ![Editor](./src/assets/Screenshot6.jpeg)
 * ![Professor Dashboard](./src/assets/Screenshot7.jpeg)
-* ![Document](./assets/Screenshot8.jpeg)
+* ![Document](./src/assets/Screenshot8.jpeg)
 * ![Certificates](./src/assets/Screenshot9.jpeg)
 
 
