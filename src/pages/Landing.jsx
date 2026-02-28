@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 import hatchBg from "../assets/y-hatch.png";
 
 export default function Landing() {
@@ -24,7 +24,7 @@ export default function Landing() {
       
       {/* CONSTANT NAVBAR - Updated to be clear */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-10 py-6 bg-transparent">
-        <div className="w-16 h-16 rounded-full border-2 border-black overflow-hidden flex items-center justify-center bg-white shadow-sm">
+        <div className="w-16 h-16 rounded-full  overflow-hidden flex items-center justify-center ">
           <img 
             src={logo} 
             alt="WordTrace Logo" 
