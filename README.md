@@ -94,7 +94,18 @@ npm run dev
 
 ##  Media
 
-* **Screenshots:** [Insert Screenshots Here]
+* **Screenshots:**
+* ![Landing Page](./assets/Screenshot1.jpeg)
+* ![About](./assets/Screenshot2.jpeg)
+* ![Contact](./assets/Screenshot3.jpeg)
+* ![Login Page](./assets/Screenshot4.jpeg)
+* ![Student Dashboard](./assets/Screenshot5.jpeg)
+* ![Editor](./assets/Screenshot6.jpeg)
+* ![Professor Dashboard](./assets/Screenshot7.jpeg)
+* ![Document](./assets/Screenshot8.jpeg)
+* ![Certificates](./assets/Screenshot9.jpeg)
+
+
 * **Demo Video Link:** [Insert Demo Video Link Here]
 
 
